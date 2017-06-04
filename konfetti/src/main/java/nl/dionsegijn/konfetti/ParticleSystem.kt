@@ -1,7 +1,6 @@
 package nl.dionsegijn.konfetti
 
 import android.graphics.Color
-import android.support.annotation.ColorInt
 import nl.dionsegijn.konfetti.emitters.BurstEmitter
 import nl.dionsegijn.konfetti.emitters.Emitter
 import nl.dionsegijn.konfetti.emitters.StreamEmitter
@@ -25,7 +24,7 @@ class ParticleSystem(val konfettiView: KonfettiView) {
 
     /** Default values */
     private var colors = intArrayOf(Color.RED)
-    private var sizes = arrayOf(Size.SMALL)
+    private var sizes = arrayOf(Size(16))
     private var shapes = arrayOf(Shape.RECT)
     private var confettiConfig = ConfettiConfig()
 
@@ -45,6 +44,11 @@ class ParticleSystem(val konfettiView: KonfettiView) {
     }
 
     /**
+     * Set position range to emit particles from
+     * A random position on the x-axis between [minX] and [maxX] and y-axis between [minY] and [maxY]
+     * will be picked for each confetti.
+     * @param [maxX] leave this null to only emit from [minX]
+     * @param [maxY] leave this null to only emit from [minY]
      */
     fun setPosition(minX: Float, maxX: Float? = null, minY: Float, maxY: Float? = null): ParticleSystem {
         location.betweenX(minX, maxX)
@@ -56,14 +60,13 @@ class ParticleSystem(val konfettiView: KonfettiView) {
      * One of the colors will be randomly picked when confetti is generated
      * Default color is Color.RED
      */
-    fun addColors(@ColorInt vararg colors: Int): ParticleSystem {
+    fun addColors(vararg colors: Int): ParticleSystem {
         this.colors = colors
         return this
     }
 
     /**
-     * Configure one or more sizes predefined in [Size].
-     * Default size is [Size.SMALL]
+     * Add one or more different sizes by defining a [Size] in dip and optionally its mass
      */
     fun addSizes(vararg possibleSizes: Size): ParticleSystem {
         this.sizes = possibleSizes.filterIsInstance<Size>().toTypedArray()

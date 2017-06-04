@@ -2,10 +2,10 @@
 
 [![platform](https://img.shields.io/badge/platform-Android-green.svg)](https://www.android.com)
 [![API](https://img.shields.io/badge/API-16%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=16s)
-[![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC) [![Twitter](https://img.shields.io/badge/Twitter-@dionsegijn-blue.svg?style=flat)](http://twitter.com/dionsegijn)
+[![License: ISC](https://img.shields.io/badge/License-ISC-yellow.svg)](https://opensource.org/licenses/ISC) [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin) [![Twitter](https://img.shields.io/badge/Twitter-@dionsegijn-blue.svg?style=flat)](http://twitter.com/dionsegijn)
 
 
-Celebrate more with this lightweight confetti particle system 🎊 Create realistic confetti by implementing this particle system.
+Celebrate more with this lightweight confetti particle system 🎊 Create realistic confetti by implementing this easy to use library.
 
 ## Demo app
 
@@ -45,7 +45,7 @@ viewKonfetti.build()
     .setFadeOutEnabled(true)
     .setTimeToLive(2000L)
     .addShapes(Shape.RECT, Shape.CIRCLE)
-    .addSizes(Size.SMALL)
+    .addSizes(Size(12))
     .setPosition(-50f, viewKonfetti.width + 50f, -50f, -50f)
     .stream(300, 5000L)
 ```
@@ -56,9 +56,10 @@ Just add the following dependency in your app's build.gradle
 
 ```groovy
 dependencies {
-      compile 'nl.dionsegijn:konfetti:1.0'
+      compile 'nl.dionsegijn:konfetti:1.0.2'
 }
 ```
+ [ ![Download](https://api.bintray.com/packages/danielmartinus/maven/Konfetti/images/download.svg) ](https://bintray.com/danielmartinus/maven/Konfetti/_latestVersion)
 
 ## Contribute
 
@@ -76,7 +77,7 @@ As mentioned, there is always room for improvement. Do you have any performance 
 
 In line with the previous contribute section there are some already known issues that could be resolved and are open for discussion.
 
-- Determining the size of the particles in the current implementation is not ideal. More here: [#7 Confetti size system](https://github.com/DanielMartinus/Konfetti/issues/7)
+- ~~Determining the size of the particles in the current implementation is not ideal. More here: [#7 Confetti size system](https://github.com/DanielMartinus/Konfetti/issues/7)~~
 - A performance improvement to the library could for one be to implement a shared object pool amongst all particle systems instead of having them to handle confetti instances themselves.
 
 ## License 

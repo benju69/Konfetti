@@ -4,9 +4,13 @@ import android.content.Context
 import android.graphics.Canvas
 import android.util.AttributeSet
 import android.view.View
+import nl.dionsegijn.konfetti.listeners.OnParticleSystemUpdateListener
 
 /**
  * Created by dionsegijn on 3/25/17.
+ * Implement this view to render the particles on.
+ * Call [build] to setup a particle system. KonfettiView will then invalidate
+ * pass the canvas to each system where each system will handle the rendering.
  */
 class KonfettiView : View {
 
@@ -14,8 +18,21 @@ class KonfettiView : View {
     constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
+    /**
+     * Active particle systems
+     */
     val systems: MutableList<ParticleSystem> = mutableListOf()
-    var timer: TimerIntegration = TimerIntegration()
+
+    /**
+     * Keeping track of the delta time between frame rendering
+     */
+    internal var timer: TimerIntegration = TimerIntegration()
+
+    /**
+     * [OnParticleSystemUpdateListener] listener to notify when a new particle system
+     * starts rendering and when a particle system stopped rendering
+     */
+    var onParticleSystemUpdateListener: OnParticleSystemUpdateListener? = null
 
     fun build(): ParticleSystem {
         return ParticleSystem(this)
@@ -26,9 +43,12 @@ class KonfettiView : View {
 
         val deltaTime = timer.getDeltaTime()
         for (i in systems.size - 1 downTo 0) {
-            val konfetti = systems[i]
-            konfetti.emitter.render(canvas, deltaTime)
-            if (konfetti.doneEmitting()) systems.removeAt(i)
+            val particleSystem = systems[i]
+            particleSystem.emitter.render(canvas, deltaTime)
+            if (particleSystem.doneEmitting()) {
+                systems.removeAt(i)
+                onParticleSystemUpdateListener?.onParticleSystemEnded(this, particleSystem, systems.size)
+            }
         }
 
         if (systems.size != 0) {
@@ -40,9 +60,14 @@ class KonfettiView : View {
 
     fun start(particleSystem: ParticleSystem) {
         systems.add(particleSystem)
+        onParticleSystemUpdateListener?.onParticleSystemStarted(this, particleSystem, systems.size)
         invalidate()
     }
 
+    /**
+     * TimerIntegration retrieves the delta time since the rendering of the previous frame.
+     * Delta time is used to draw the confetti correctly if any frame drops occur.
+     */
     class TimerIntegration {
         var previousTime: Long = -1L
 
